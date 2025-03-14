@@ -44,7 +44,7 @@ jobs:
           ANDROIDSDK: /home/runner/android-sdk
           ANDROIDNDK: /home/runner/android-sdk/ndk/25.1.8937393
         run: |
-          p4a apk --private . --package=com.jbhugh.songtabfinder --name="SongTabFinder" --version=1.0 --bootstrap=sdl2 --requirements=python3,kivy,sounddevice,cffi,portaudio --arch=arm64-v8a --minsdk=21 --sdk-dir=/home/runner/android-sdk
+          p4a apk --private . --package=com.jbhugh.songtabfinder --name="SongTabFinder" --version=1.0 --bootstrap=sdl2 --requirements=python3,kivy,sounddevice,cffi,libportaudio --arch=arm64-v8a --minsdk=21 --sdk-dir=/home/runner/android-sdk
           ls -l /home/runner/.local/share/python-for-android/dists/*/build/outputs/apk/debug/
 
       - name: Upload APK
