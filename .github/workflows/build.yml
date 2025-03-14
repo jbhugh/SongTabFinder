@@ -48,8 +48,7 @@ jobs:
                   --name="SongTabFinder" \
                   --version=1.0 \
                   --bootstrap=sdl2 \
-                  --requirements=python3,kivy,sounddevice,cffi \
-                  --depend=libportaudio \
+                  --requirements=python3,kivy,sounddevice,cffi,libportaudio2 \
                   --arch=arm64-v8a \
                   --minsdk=21 \
                   --sdk-dir=$ANDROID_HOME
