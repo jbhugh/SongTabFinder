@@ -20,10 +20,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y unzip
+          mkdir -p /home/runner/android-sdk
           wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O sdk-tools.zip
-          unzip sdk-tools.zip -d /usr/local/lib/android
+          unzip sdk-tools.zip -d /home/runner/android-sdk
           rm sdk-tools.zip
-          yes | /usr/local/lib/android/cmdline-tools/bin/sdkmanager --sdk_root=/usr/local/lib/android/sdk "platforms;android-33" "build-tools;33.0.0" "ndk;25.1.8937393"
+          yes | /home/runner/android-sdk/cmdline-tools/bin/sdkmanager --sdk_root=/home/runner/android-sdk "platforms;android-33" "build-tools;33.0.0" "ndk;25.1.8937393"
 
       - name: Install dependencies
         run: |
@@ -32,8 +33,8 @@ jobs:
 
       - name: Build APK
         env:
-          ANDROIDSDK: /usr/local/lib/android/sdk
-          ANDROIDNDK: /usr/local/lib/android/sdk/ndk/25.1.8937393
+          ANDROIDSDK: /home/runner/android-sdk
+          ANDROIDNDK: /home/runner/android-sdk/ndk/25.1.8937393
         run: |
           p4a apk --private . --package=com.jbhugh.songtabfinder --name="SongTabFinder" --version=1.0 --bootstrap=sdl2 --requirements=python3,kivy --arch=arm64-v8a --minsdk=21
 
