@@ -1,9 +1,6 @@
 name: Build Android APK
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 jobs:
@@ -22,12 +19,12 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential autoconf automake libtool libtool-bin
+          sudo apt-get install -y build-essential autoconf automake libtool libtool-bin zlib1g-dev libffi-dev
 
-      - name: Install Python build dependencies
+      - name: Install Buildozer
         run: |
           python -m pip install --upgrade pip
-          pip install buildozer python-for-android==2023.5.21 requests kivy
+          pip install buildozer
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
@@ -37,32 +34,19 @@ jobs:
       - name: Install Android SDK tools
         run: |
           yes | sdkmanager --licenses
-          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;25.2.9519653"
         env:
           ANDROID_SDK_ROOT: $ANDROID_HOME
 
-      - name: Clean p4a build cache
-        run: |
-          p4a clean_all
-
       - name: Build APK
         run: |
-          p4a apk --private . \
-                  --package=com.jbhugh.songtabfinder \
-                  --name="SongTabFinder" \
-                  --version=1.0 \
-                  --bootstrap=sdl2 \
-                  --requirements=python3,kivy,requests \
-                  --arch=arm64-v8a \
-                  --minsdk=21 \
-                  --sdk-dir=$ANDROID_HOME \
-                  --manifest=AndroidManifest.tmpl.xml \
-                  --verbose
+          buildozer -v android debug
         env:
-          ANDROID_HOME: /usr/local/lib/android/sdk
+          ANDROIDSDK: $ANDROID_HOME
+          ANDROIDNDK: /usr/local/lib/android/sdk/ndk/25.2.9519653
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: songtabfinder-apk
-          path: ./*.apk
+          path: ./bin/*.apk
