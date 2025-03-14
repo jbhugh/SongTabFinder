@@ -34,6 +34,8 @@ jobs:
       - name: Accept Android SDK licenses
         run: |
           yes | sdkmanager --licenses || true
+          # Retry to ensure all licenses are accepted
+          yes | sdkmanager --licenses || true
         env:
           ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
 
