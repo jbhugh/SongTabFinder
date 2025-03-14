@@ -51,8 +51,8 @@ jobs:
                   --package=com.jbhugh.songtabfinder \
                   --name="SongTabFinder" \
                   --version=1.0 \
-                  --bootstrap=sdl2 \
-                  --requirements=python3,kivy,requests \
+                  --bootstrap=python \
+                  --requirements=requests \
                   --arch=arm64-v8a \
                   --minsdk=21 \
                   --sdk-dir=$ANDROID_HOME \
