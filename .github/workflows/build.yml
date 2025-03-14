@@ -28,9 +28,9 @@ jobs:
           sudo apt-get install -y unzip
           mkdir -p /home/runner/android-sdk/cmdline-tools
           wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O sdk-tools.zip
-          unzip sdk-tools.zip -d /home/runner/android-sdk/cmdline-tools/latest
+          unzip sdk-tools.zip -d /home/runner/android-sdk/cmdline-tools
           rm sdk-tools.zip
-          yes | /home/runner/android-sdk/cmdline-tools/bin/sdkmanager --sdk_root=/home/runner/android-sdk "platforms;android-33" "build-tools;33.0.0" "ndk;25.1.8937393" --verbose
+          yes | /home/runner/android-sdk/cmdline-tools/cmdline-tools/bin/sdkmanager --sdk_root=/home/runner/android-sdk "platforms;android-33" "build-tools;33.0.0" "ndk;25.1.8937393" --verbose
 
       - name: Install dependencies
         run: |
