@@ -31,9 +31,14 @@ jobs:
         with:
           sdk-version: '34'
 
+      - name: Accept Android SDK licenses
+        run: |
+          yes | sdkmanager --licenses || true
+        env:
+          ANDROID_SDK_ROOT: $ANDROID_HOME
+
       - name: Install Android SDK tools
         run: |
-          yes | sdkmanager --licenses
           sdkmanager "platform-tools" "platforms;android-34" "build-tools;36.0.0" "ndk;25.2.9519653"
         env:
           ANDROID_SDK_ROOT: $ANDROID_HOME
