@@ -22,7 +22,7 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential autoconf automake libtool
+          sudo apt-get install -y build-essential autoconf automake libtool libtool-bin
 
       - name: Install Python build dependencies
         run: |
