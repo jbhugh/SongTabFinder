@@ -19,7 +19,7 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential autoconf automake libtool libtool-bin zlib1g-dev libffi-dev unzip
+          sudo apt-get install -y build-essential autoconf automake libtool libtool-bin zlib1g-dev unzip
 
       - name: Install Buildozer
         run: |
@@ -28,8 +28,9 @@ jobs:
 
       - name: Install Android SDK Command-Line Tools
         run: |
-          wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdline-tools.zip
-          unzip cmdline-tools.zip -d /usr/local/lib/android
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdline-tools.zip || { echo "wget failed"; exit 1; }
+          ls -lh cmdline-tools.zip || { echo "Download failed or file missing"; exit 1; }
+          unzip cmdline-tools.zip -d /usr/local/lib/android || { echo "Unzip failed"; exit 1; }
           rm cmdline-tools.zip
 
       - name: Accept Android SDK licenses
