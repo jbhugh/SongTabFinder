@@ -41,7 +41,11 @@ jobs:
         env:
           ANDROID_SDK_ROOT: $ANDROID_HOME
 
-      - name: Build APK
+      - name: Clean p4a build cache
+        run: |
+          p4a clean_all
+
+      - name: Build APK with verbose output
         run: |
           p4a apk --private . \
                   --package=com.jbhugh.songtabfinder \
@@ -52,7 +56,8 @@ jobs:
                   --arch=arm64-v8a \
                   --minsdk=21 \
                   --sdk-dir=$ANDROID_HOME \
-                  --manifest=AndroidManifest.tmpl.xml
+                  --manifest=AndroidManifest.tmpl.xml \
+                  --verbose
         env:
           ANDROID_HOME: /usr/local/lib/android/sdk
 
