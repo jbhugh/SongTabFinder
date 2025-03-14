@@ -38,14 +38,10 @@ jobs:
         run: |
           yes | /home/runner/android/sdk/cmdline-tools/latest/cmdline-tools/bin/sdkmanager --sdk_root=/home/runner/android/sdk --licenses || true
           yes | /home/runner/android/sdk/cmdline-tools/latest/cmdline-tools/bin/sdkmanager --sdk_root=/home/runner/android/sdk --licenses || true
-        env:
-          ANDROID_SDK_ROOT: /home/runner/android/sdk
 
       - name: Install Android SDK tools
         run: |
-          /home/runner/android/sdk/cmdline-tools/latest/cmdline-tools/bin/sdkmanager --sdk_root=/home/runner/android/sdk "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;25.2.9519653"
-        env:
-          ANDROID_SDK_ROOT: /home/runner/android/sdk
+          /home/runner/android/sdk/cmdline-tools/latest/cmdline-tools/bin/sdkmanager --sdk_root=/home/runner/android/sdk --verbose "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;25.2.9519653"
 
       - name: Debug SDK Installation
         run: |
