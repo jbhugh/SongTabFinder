@@ -27,7 +27,15 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
         with:
-          sdk-version: '34'  # Latest stable Android SDK as of March 2025
+          sdk-version: '34'
+
+      - name: Install Android SDK tools
+        run: |
+          # Accept licenses and install command-line tools, build-tools, and platform
+          yes | sdkmanager --licenses
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+        env:
+          ANDROID_SDK_ROOT: $ANDROID_HOME  # Use the path set by setup-android
 
       - name: Build APK
         run: |
@@ -40,7 +48,9 @@ jobs:
                   --depend=libportaudio \
                   --arch=arm64-v8a \
                   --minsdk=21 \
-                  --sdk-dir=/home/runner/android-sdk
+                  --sdk-dir=$ANDROID_HOME
+        env:
+          ANDROID_HOME: /usr/local/lib/android/sdk  # Default path from setup-android
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
