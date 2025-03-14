@@ -30,21 +30,22 @@ jobs:
         run: |
           wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdline-tools.zip || { echo "wget failed"; exit 1; }
           ls -lh cmdline-tools.zip || { echo "Download failed or file missing"; exit 1; }
-          unzip cmdline-tools.zip -d /usr/local/lib/android || { echo "Unzip failed"; exit 1; }
+          mkdir -p /home/runner/android
+          unzip cmdline-tools.zip -d /home/runner/android || { echo "Unzip failed"; exit 1; }
           rm cmdline-tools.zip
 
       - name: Accept Android SDK licenses
         run: |
-          yes | /usr/local/lib/android/cmdline-tools/bin/sdkmanager --licenses || true
-          yes | /usr/local/lib/android/cmdline-tools/bin/sdkmanager --licenses || true
+          yes | /home/runner/android/cmdline-tools/bin/sdkmanager --licenses || true
+          yes | /home/runner/android/cmdline-tools/bin/sdkmanager --licenses || true
         env:
-          ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+          ANDROID_SDK_ROOT: /home/runner/android/sdk
 
       - name: Install Android SDK tools
         run: |
-          /usr/local/lib/android/cmdline-tools/bin/sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;25.2.9519653"
+          /home/runner/android/cmdline-tools/bin/sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;25.2.9519653"
         env:
-          ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+          ANDROID_SDK_ROOT: /home/runner/android/sdk
 
       - name: Debug SDK Installation
         run: |
@@ -52,14 +53,14 @@ jobs:
           ls -la $ANDROID_HOME
           ls -la $ANDROID_HOME/build-tools || echo "build-tools folder not found"
         env:
-          ANDROID_HOME: /usr/local/lib/android/sdk
+          ANDROID_HOME: /home/runner/android/sdk
 
       - name: Build APK
         run: |
           buildozer -v android debug
         env:
-          ANDROIDSDK: /usr/local/lib/android/sdk
-          ANDROIDNDK: /usr/local/lib/android/sdk/ndk/25.2.9519653
+          ANDROIDSDK: /home/runner/android/sdk
+          ANDROIDNDK: /home/runner/android/sdk/ndk/25.2.9519653
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
