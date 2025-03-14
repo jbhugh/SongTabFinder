@@ -50,4 +50,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: songtabfinder-apk
-          path: SongTabFinder*.apk
+          path: /home/runner/.local/share/python-for-android/dists/unnamed_dist_1/build/outputs/apk/debug/unnamed_dist_1-debug-1.0.apk
