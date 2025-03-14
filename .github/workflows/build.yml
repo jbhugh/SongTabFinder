@@ -2,53 +2,48 @@ name: Build Android APK
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
-      - name: Set up Java 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      - name: Install Android SDK and NDK
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y unzip
-          mkdir -p /home/runner/android-sdk/cmdline-tools
-          wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O sdk-tools.zip
-          unzip sdk-tools.zip -d /home/runner/android-sdk/cmdline-tools
-          mv /home/runner/android-sdk/cmdline-tools/cmdline-tools /home/runner/android-sdk/cmdline-tools/latest
-          rm sdk-tools.zip
-          yes | /home/runner/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=/home/runner/android-sdk "platforms;android-33" "build-tools;33.0.0" "ndk;25.1.8937393" --verbose
-          ls -R /home/runner/android-sdk
-
-      - name: Install dependencies
+      - name: Install build dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install cython kivy python-for-android
+          pip install buildozer python-for-android
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          sdk-version: '34'  # Latest stable Android SDK as of March 2025
 
       - name: Build APK
-        env:
-          ANDROIDSDK: /home/runner/android-sdk
-          ANDROIDNDK: /home/runner/android-sdk/ndk/25.1.8937393
         run: |
-          p4a apk --private . --package=com.jbhugh.songtabfinder --name="SongTabFinder" --version=1.0 --bootstrap=sdl2 --requirements=python3,kivy,sounddevice,cffi,libportaudio --arch=arm64-v8a --minsdk=21 --sdk-dir=/home/runner/android-sdk
-          ls -l /home/runner/.local/share/python-for-android/dists/*/build/outputs/apk/debug/
+          p4a apk --private . \
+                  --package=com.jbhugh.songtabfinder \
+                  --name="SongTabFinder" \
+                  --version=1.0 \
+                  --bootstrap=sdl2 \
+                  --requirements=python3,kivy,sounddevice,cffi \
+                  --depend=libportaudio \
+                  --arch=arm64-v8a \
+                  --minsdk=21 \
+                  --sdk-dir=/home/runner/android-sdk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: songtabfinder-apk
-          path: /home/runner/.local/share/python-for-android/dists/*/build/outputs/apk/debug/*.apk
+          path: ./*.apk
