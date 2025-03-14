@@ -34,22 +34,28 @@ jobs:
       - name: Accept Android SDK licenses
         run: |
           yes | sdkmanager --licenses || true
-          yes | sdkmanager --licenses || true  # Run twice to ensure all prompts are caught
         env:
-          ANDROID_SDK_ROOT: $ANDROID_HOME
+          ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
 
       - name: Install Android SDK tools
         run: |
           sdkmanager "platform-tools" "platforms;android-34" "build-tools;36.0.0" "ndk;25.2.9519653"
-          ls -la $ANDROID_SDK_ROOT/build-tools  # Debug: confirm build-tools folder exists
         env:
-          ANDROID_SDK_ROOT: $ANDROID_HOME
+          ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+
+      - name: Debug SDK Installation
+        run: |
+          echo "ANDROID_HOME is $ANDROID_HOME"
+          ls -la $ANDROID_HOME
+          ls -la $ANDROID_HOME/build-tools || echo "build-tools folder not found"
+        env:
+          ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
 
       - name: Build APK
         run: |
           buildozer -v android debug
         env:
-          ANDROIDSDK: $ANDROID_HOME
+          ANDROIDSDK: /usr/local/lib/android/sdk
           ANDROIDNDK: /usr/local/lib/android/sdk/ndk/25.2.9519653
 
       - name: Upload APK
